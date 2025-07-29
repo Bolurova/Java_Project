@@ -10,7 +10,7 @@ public class App {
         
      // новый экземпляр
         TV tv = new TV(number);
-        System.out.println("TV have size: " + tv.getDiagonal() + "!");
+        System.out.println("Размер телевизора: " + tv.getDiagonal() + "!");
 
         }
 }
