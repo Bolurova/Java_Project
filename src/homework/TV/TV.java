@@ -28,5 +28,9 @@ public class TV {
         return diagonal;
     }
 
+    public void setDiagonal(int diagonal) {
+        this.diagonal = diagonal;
+    }
+
 }
 
