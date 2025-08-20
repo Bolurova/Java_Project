@@ -18,6 +18,7 @@
 В корне папки с программой должен быть файл .gitignore. Программа локально коммитится и публикуется в репозиторий GitHub на проверку.    */
 
 package homework.homework07;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -28,6 +29,7 @@ public class App {
 
         List<Person> customers = new ArrayList<>();
         List<Product> products = new ArrayList<>();
+        
 
         // Ввод данных о покупателях
         System.out.println("Введите данные покупателей (формат: имя1 = сумма; имя2=сумма), для завершения нажмите кнопку Enter:");
@@ -41,14 +43,34 @@ public class App {
         }
 
         // Ввод данных о продуктах
-        System.out.println("Введите данные продуктов (формат: продукт 1 = стоимость; продукт 2 = стоимость), для завершения нажмите кнопку Enter:");
+        System.out.println("Введите данные продуктов (формат: продукт 1 = стоимость ,скидка: размер скидки: срок действия скидки в формате 2025-08-24); продукт 2 = стоимость (размер скидки, срок действия скидки)), для завершения нажмите кнопку Enter:");
         String input_product = scanner.nextLine();
             String[] parts_product = input_product.split(";");
             for (String part_pr : parts_product) {
                 String[] info_pr = part_pr.split("=");
-                String name_pr = info_pr[0];
-                double price_pr = Double.parseDouble(info_pr[1]);
-                products.add(new Product(name_pr, price_pr));
+                String name_pr = info_pr[0]; //вычислили продукт
+                String part_2 = info_pr[1]; // сохарняем часть цены для дальнейшего разбора на цену-скидку
+               
+                // если есть слово "скидка"
+                if (part_2.contains("скидка")) { 
+                    
+                        String[] info_pd = part_2.split(","); // разделим стоимость продукта от скидки
+                        double price_pr = Double.parseDouble(info_pd[0]); // сохранили цену
+                        String part_dic = info_pd[1]; // сохранили кусок скидки+срок скидки
+
+                        String[] parts_discount = part_dic.split(":"); // вычлиняем скидку
+                 //       String name_d = parts_discount[0]; // сохранили слово "скидка"
+                        double price_d = Double.parseDouble(parts_discount[1]); // сохранили размер скидки
+                        LocalDate price_td = LocalDate.parse(parts_discount[2].trim()); // срок действия скидки
+                        products.add(new DiscountProduct(name_pr, price_pr,price_d,price_td));
+                    
+                  }
+                  else {
+                     double price_pr = Double.parseDouble(info_pr[1]);
+                //     double price_d = 0; // если слова "скидка" отсутстует, то сохраняем скидку = 0
+                     products.add(new Product(name_pr, price_pr));
+                  }
+//                products.add(new Product(name_pr, price_pr));
         }
         // System.out.println("Покупатели: " + customers);
         // System.out.println(products);

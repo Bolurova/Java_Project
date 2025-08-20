@@ -13,19 +13,9 @@ class Product {
     private String nameProduct;
     private double price;
 
+    // конструктор
     public Product( String nameProduct, double price) {
-        if (nameProduct == null || nameProduct.trim().isEmpty()) {
-            throw new IllegalArgumentException("Название продукта не может быть пустым");
-        }
-        if (price < 0) {
-            throw new IllegalArgumentException("Стоимость продукта не может быть отрицательной");
-        }
-         if (nameProduct.length() < 3) {
-            throw new IllegalArgumentException("Название продукта не может быть короче 3 символов");
-        }
-        if (nameProduct.matches("\\d+")) {
-            throw new IllegalArgumentException("Название продукта не может содержать только цифры");
-        }
+        validations (nameProduct, price);
         this.nameProduct = nameProduct.trim();
         this.price = price;
     }
@@ -37,7 +27,23 @@ class Product {
         return price;
     }
 
-
+    // Общие проверки для продукта и скидки
+    private void validations (String nameProduct, double price) {
+        if (nameProduct == null || nameProduct.trim().isEmpty()) {
+            throw new IllegalArgumentException("Название продукта не может быть пустым");
+        }
+        if (nameProduct.length() < 3) {
+            throw new IllegalArgumentException("Название продукта не может быть короче 3 символов");
+        }
+        if (nameProduct.matches("\\d+")) {
+            throw new IllegalArgumentException("Название продукта не может содержать только цифры");
+        }
+        if (price <= 0) {
+            throw new IllegalArgumentException("Стоимость продукта должна быть больше 0");
+        }
+    }
+    
+    
 
     /**
      * @param price the price to set

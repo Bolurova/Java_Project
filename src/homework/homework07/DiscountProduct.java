@@ -16,33 +16,30 @@
  */
 package homework.homework07;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 class DiscountProduct extends Product {
 
     private double discountSize;
-    Date termDate;
+    LocalDate termDate;
 
-    public DiscountProduct(String nameProduct, double price, double discountSize, Date termDate) {
+    public DiscountProduct(String nameProduct, double price, double discountSize, LocalDate termDate) {
         super(nameProduct, price);
         
         this.discountSize=discountSize;
         this.termDate=termDate;
 
-         if (nameProduct == null || nameProduct.trim().isEmpty()) {
-            throw new IllegalArgumentException("Название продукта не может быть пустым");
-            }
-        if (price < 0) {
-            throw new IllegalArgumentException("Стоимость продукта не может быть отрицательной");
-             }
+          if (discountSize < 0 || discountSize >= getPrice()) {
+            throw new IllegalArgumentException("Скидка должна быть больше 0 и меньше стоимости продукта");
+        }
     }
 
 
-    public Date getTermDate() {
+    public LocalDate getTermDate() {
         return termDate;
     }
 
-    public void setTermDate(Date termDate) {
+    public void setTermDate(LocalDate termDate) {
         this.termDate = termDate;
     }
 
@@ -53,6 +50,19 @@ class DiscountProduct extends Product {
     public void setDiscountSize(int discountSize) {
         this.discountSize = discountSize;
     }
-
-
+// Метод для получения актуальной цены с учетом скидки
+    @Override
+    public double getPrice() {
+        if (termDate != null && LocalDate.now().isBefore(termDate)) {
+            return super.getPrice() - (super.getPrice()*(discountSize/100));
+        }
+        return super.getPrice(); 
+    }
+ @Override
+    public String toString() {
+        if (termDate != null && LocalDate.now().isBefore(termDate)) {
+            return super.getNameProduct() + " (Цена со скидкой: " + getPrice() +")";
+        }
+        return super.toString();
+    }
 }
